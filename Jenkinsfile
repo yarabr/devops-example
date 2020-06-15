@@ -82,17 +82,11 @@ pipeline {
             agent { label 'docker-machine' }
 
             steps {
-                dir('.aws') {
-                    withCredentials([file(credentialsId: 'aws-credentials', variable: 'credentialsEnv')]) {
-                        sh "cat ${credentialsEnv} > credentials"
-                    }
-
-                    withCredentials([file(credentialsId: 'aws-config', variable: 'configEnv')]) {
-                        sh "cat ${configEnv} > config"
-                    }
-
-                    sh "ls -la"
+                withCredentials([file(credentialsId: 'eks-kubeconfig', variable: 'kubeconfigEnv')]) {
+                    sh "cat ${kubeconfigEnv} > kubeconfig"
                 }
+
+                sh "docker run --rm --name kubectl -v ./kubeconfig:/.kube/config bitnami/kubectl:latest kubectl get pods -n vkpr"
             }
         }
     }
