@@ -79,16 +79,16 @@ pipeline {
             }
         }
 
-        stage('Deploy to EKS') {
-            agent { label 'docker-machine' }
-
-            steps {
-                withCredentials([file(credentialsId: 'eks-kubeconfig', variable: 'kubeconfigEnv')]) {
-                    sh "cat ${kubeconfigEnv} > kubeconfig"
-                }
-
-                sh "docker run -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_USR} -e AWS_SECRET_ACCESS_KEY=${AWS_ACCESS_PSW} -v ${PWD}:/.kube --rm bearengineer/awscli-kubectl kubectl get pods -n vkpr"
-            }
-        }
+//         stage('Deploy to EKS') {
+//             agent { label 'docker-machine' }
+//
+//             steps {
+//                 withCredentials([file(credentialsId: 'eks-kubeconfig', variable: 'kubeconfigEnv')]) {
+//                     sh "cat ${kubeconfigEnv} > kubeconfig"
+//                 }
+//
+//                 sh "docker run -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_USR} -e AWS_SECRET_ACCESS_KEY=${AWS_ACCESS_PSW} -v ${PWD}:/.kube --rm bearengineer/awscli-kubectl kubectl get pods -n vkpr"
+//             }
+//         }
     }
 }
