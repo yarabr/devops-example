@@ -89,7 +89,7 @@ pipeline {
                         sh "cat ${credentialsEnv} > .aws/credentials"
                     }
 
-                    withCredentials[file(credentialsId: 'aws-config', variable: 'configEnv')]) {
+                    withCredentials([file(credentialsId: 'aws-config', variable: 'configEnv')]) {
                         sh "cat ${configEnv} > .aws/config"
                     }
 
