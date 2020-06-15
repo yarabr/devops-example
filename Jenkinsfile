@@ -86,11 +86,11 @@ pipeline {
 
                 dir('.aws') {
                     withCredentials([file(credentialsId: 'aws-credentials', variable: 'credentialsEnv')]) {
-                        sh "cat ${credentialsEnv} > .aws/credentials"
+                        sh "cat ${credentialsEnv} > credentials"
                     }
 
                     withCredentials([file(credentialsId: 'aws-config', variable: 'configEnv')]) {
-                        sh "cat ${configEnv} > .aws/config"
+                        sh "cat ${configEnv} > config"
                     }
 
                     sh "ls -la"
