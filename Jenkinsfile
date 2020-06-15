@@ -86,7 +86,7 @@ pipeline {
                     sh "cat ${kubeconfigEnv} > kubeconfig"
                 }
 
-                sh "docker run --rm --name kubectl -v ${PWD}/kubeconfig:/.kube/config bitnami/kubectl:latest kubectl get pods -n vkpr"
+                sh "docker run --rm --name kubectl -v ${PWD}/kubeconfig:/.kube/config bitnami/kubectl:latest get pods -n vkpr"
             }
         }
     }
