@@ -82,8 +82,6 @@ pipeline {
             agent { label 'docker-machine' }
 
             steps {
-                sh "mkdir .aws"
-
                 dir('.aws') {
                     withCredentials([file(credentialsId: 'aws-credentials', variable: 'credentialsEnv')]) {
                         sh "cat ${credentialsEnv} > credentials"
