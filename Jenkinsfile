@@ -48,7 +48,7 @@ pipeline {
                 unstash "${WAR_NAME}"
                 unstash "${JAR_NAME}"
 
-                sh "docker build -t ${DOCKER_IMAGE_NAME}/${DOCKER_IMAGE_TAG} --build-arg JAR_FILE=${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}.jar --build-arg WAR_FILE=${ARTIFACT_PATH}/${WAR_NAME}.war ."
+                sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} --build-arg JAR_FILE=${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}.jar --build-arg WAR_FILE=${ARTIFACT_PATH}/${WAR_NAME}.war ."
             }
         }
 
