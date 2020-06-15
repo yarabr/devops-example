@@ -18,7 +18,7 @@ pipeline {
     }
 
     stages {
-        agent
+        agent { label 'master' }
         stage('Build Project') {
             steps {
                 sh "mvn clean package"
@@ -41,7 +41,7 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            agent { label 'docker-machine'}
+            agent { label 'docker-machine' }
 
             steps {
                 unstash "${WAR_NAME}"
