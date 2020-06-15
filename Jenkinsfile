@@ -7,8 +7,8 @@ pipeline {
         MVN_OPTS = "-Dmaven.repo.local=${WORKSPACE} -Dmaven.test.failure.ignore=true"
         ARTIFACT_PATH = "target"
         DEPENDENCY_PATH = "dependency"
-        WAR_NAME = "helloworld.war"
-        JAR_NAME = "jetty-runner.jar"
+        WAR_NAME = "helloworld"
+        JAR_NAME = "jetty-runner"
         DOCKER_HUB = credentials("docker-hub-login")
     }
 
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh "mvn clean package"
 
-                stash includes: "${ARTIFACT_PATH}/${WAR_NAME}", "${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}"
+                stash includes: "${ARTIFACT_PATH}/${WAR_NAME}.war", "${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}.jar"
                         name: "${WAR_NAME}"
             }
         }
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 unstash "${WAR_NAME}"
 
-                sh "docker build -f Dockerfile-ci -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}/${DOCKER_IMAGE_TAG} --build-arg JAR_FILE=${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME} --build-arg WAR_FILE=${ARTIFACT_PATH}/${WAR_NAME} ."
+                sh "docker build -f Dockerfile-ci -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}/${DOCKER_IMAGE_TAG} --build-arg JAR_FILE=${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}.jar --build-arg WAR_FILE=${ARTIFACT_PATH}/${WAR_NAME}.war ."
             }
         }
 
