@@ -19,8 +19,6 @@ pipeline {
 
     stages {
         stage('Build Project') {
-            agent { label 'master' }
-
             steps {
                 sh "mvn clean package"
 
@@ -40,6 +38,23 @@ pipeline {
 //                 }
 //             }
 //         }
+
+        stage('Sonar Analysis') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    echo "==> Performing SonarQube Scan"
+
+                    script {
+                        def scannerHome = tool 'SonarQube Tool';
+                        withSonarQubeEnv('SonarQube') {
+                            sh "${scannerHome}/bin/sonar-scanner"
+                        }
+                    }
+
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             agent { label 'docker-machine' }
