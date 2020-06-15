@@ -87,7 +87,7 @@ pipeline {
                     sh "cat ${kubeconfigEnv} > kubeconfig"
                 }
 
-                sh "docker run -ti -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_USR} -e AWS_SECRET_ACCESS_KEY=${AWS_ACCESS_PSW} -v ${PWD}:/.kube --rm bearengineer/awscli-kubectl kubectl get pods -n vkpr"
+                sh "docker run -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_USR} -e AWS_SECRET_ACCESS_KEY=${AWS_ACCESS_PSW} -v ${PWD}:/.kube --rm bearengineer/awscli-kubectl kubectl get pods -n vkpr"
             }
         }
     }
