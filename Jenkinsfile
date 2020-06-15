@@ -58,7 +58,7 @@ pipeline {
             steps {
                 sh '''
                 docker login --username ${DOCKER_HUB_USR} --password ${DOCKER_HUB_PSW}
-                docker push ${DOCKER_IMAGE_NAME}/${DOCKER_IMAGE_TAG}
+                docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
             '''
             }
         }
