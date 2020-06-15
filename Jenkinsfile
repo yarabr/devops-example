@@ -18,6 +18,7 @@ pipeline {
     }
 
     stages {
+        agent
         stage('Build Project') {
             steps {
                 sh "mvn clean package"
@@ -60,21 +61,4 @@ pipeline {
             }
         }
     }
-//     post {
-//         success {
-//             script {
-//                 notifications.sendSlackSuccess()
-//             }
-//         }
-//         failure {
-//             script {
-//                 notifications.sendSlackFailure()
-//             }
-//         }
-//         unstable {
-//             script {
-//                 notifications.sendSlackUnstable()
-//             }
-//         }
-//     }
 }
