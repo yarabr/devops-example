@@ -68,13 +68,33 @@ pipeline {
         }
 
         stage('Push Image to Registry') {
-            agent {label 'docker-machine' }
+            agent { label 'docker-machine' }
 
             steps {
                 sh '''
                 docker login --username ${DOCKER_HUB_USR} --password ${DOCKER_HUB_PSW}
                 docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
             '''
+            }
+        }
+
+        stage('Deploy to EKS') {
+            agent { label 'docker-machine' }
+
+            steps {
+                sh "mkdir .aws"
+
+                dir('.aws') {
+                    withCredentials([file(credentialsId: 'aws-credentials', variable: 'credentialsEnv')]) {
+                        sh "cat ${credentialsEnv} > .aws/credentials"
+                    }
+
+                    withCredentials[file(credentialsId: 'aws-config', variable: 'configEnv')]) {
+                        sh "cat ${configEnv} > .aws/config"
+                    }
+
+                    sh "ls -la"
+                }
             }
         }
     }
