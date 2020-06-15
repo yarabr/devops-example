@@ -18,33 +18,35 @@ pipeline {
     }
 
     stages {
-        agent { label 'master' }
         stage('Build Project') {
+            agent { label 'master' }
+
             steps {
                 sh "mvn clean package"
 
-                stash includes: "${ARTIFACT_PATH}/${WAR_NAME}.war", "${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}.jar"
-                        name: "${WAR_NAME}"
+                stash includes: "${ARTIFACT_PATH}/${WAR_NAME}.war", name: "${WAR_NAME}"
+                stash includes: "${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}.jar", name: "${JAR_NAME}"
             }
         }
 
-        stage('Execute Tests') {
-            steps {
-                sh "mvn ${MVN_OPTS} test"
-            }
+//         stage('Execute Tests') {
+//             steps {
+//                 sh "mvn ${MVN_OPTS} test"
+//             }
 //             post {
 //                 always {
 //                     junit "${PROJECT_DIR}/${ARTIFACT_PATH}/surefire-reports/*.xml"
 //                     step( [ $class: 'JacocoPublisher' ] )
 //                 }
 //             }
-        }
+//         }
 
         stage('Build Docker Image') {
             agent { label 'docker-machine' }
 
             steps {
                 unstash "${WAR_NAME}"
+                unstash "${JAR_NAME}"
 
                 sh "docker build -f Dockerfile-ci -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}/${DOCKER_IMAGE_TAG} --build-arg JAR_FILE=${ARTIFACT_PATH}/${DEPENDENCY_PATH}/${JAR_NAME}.jar --build-arg WAR_FILE=${ARTIFACT_PATH}/${WAR_NAME}.war ."
             }
