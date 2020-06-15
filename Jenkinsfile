@@ -10,6 +10,7 @@ pipeline {
         WAR_NAME = "helloworld"
         JAR_NAME = "jetty-runner"
         DOCKER_HUB = credentials("docker-hub-login")
+        AWS_ACCESS = credentials("aws-credentials")
     }
 
     tools {
@@ -86,7 +87,7 @@ pipeline {
                     sh "cat ${kubeconfigEnv} > kubeconfig"
                 }
 
-                sh "docker run --rm --name kubectl -v ${PWD}/kubeconfig:/.kube/config bitnami/kubectl:latest get pods -n vkpr"
+                sh "docker run -ti -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_USR} -e AWS_SECRET_ACCESS_KEY=${AWS_ACCESS_PSW} -v ${PWD}:/.kube --rm bearengineer/awscli-kubectl kubectl get pods -n vkpr"
             }
         }
     }
